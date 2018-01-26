@@ -42,10 +42,9 @@ def find_pet_by_name(pet_shop, pet_name)
 end
 
 def remove_pet_by_name(pet_shop, pet_name)
-  for pet in pet_shop[:pets]
-    if pet[:name] == pet_name
-      pet_shop[:pets].delete(pet)
-    end
+  pet = find_pet_by_name(pet_shop, pet_name)
+  if pet != nil
+    pet_shop[:pets].delete(pet)
   end
 end
 
@@ -58,28 +57,26 @@ def customer_pet_count(customer)
 end
 
 def add_pet_to_customer(pet_shop, customer, pet_name)
-  for pet in pet_shop[:pets]
-    if pet[:name] == pet_name
-      customer[:pets] << pet
-      pet_shop[:pets].delete(pet)
-    end
+  pet = find_pet_by_name(pet_shop, pet_name)
+  if pet != nil
+    customer[:pets] << pet
+    pet_shop[:pets].delete(pet)
   end
 end
 
 def customer_can_afford_pet(pet_shop, customer, pet_name)
-  for pet in pet_shop[:pets]
-    if pet[:name] == pet_name
-      price = pet[:price]
+  pet = find_pet_by_name(pet_shop, pet_name)
+  if pet != nil
+    if customer[:cash] >= pet[:price]
+      return true
+    else
+      return false
     end
-  end
-  if customer[:cash] >= price
-    return true
-  else
-    return false
   end
 end
 
-def sell_pet_to_customer(pet_shop, customer, pet)
+def sell_pet_to_customer(pet_shop, customer, pet_name)
+  pet = find_pet_by_name(pet_shop, pet_name)
   if pet == nil
     p "Sorry #{customer[:name]}, we don't have a pet by that name."
   else
